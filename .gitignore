@@ -45,3 +45,7 @@ next-env.d.ts
 /docs
 .agents/
 .extra/
+.atl/
+skills-lock.json
+skills.json
+metadata.json
