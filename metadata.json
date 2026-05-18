@@ -1,0 +1,5 @@
+{
+  "name": "Don Merengo - Club de Campo",
+  "description": "Exclusivo club de campo con servicios de primer nivel, reserva tu estancia en un entorno natural y tranquilo.",
+  "requestFramePermissions": ["geolocation"]
+}
