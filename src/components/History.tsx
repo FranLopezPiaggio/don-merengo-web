@@ -36,7 +36,7 @@ export default function History({ backgroundImage = "/rioUruguay.webp" }: Histor
             </h2>
             <div className="w-24 h-[1px] bg-sage mb-8" />
             <p className="text-white/90 text-lg leading-relaxed mb-6">
-              Don Merengo Club de Campo es un lugar con mucha historia, en donde surgieron muchos encuentros iniciando con nuestro bisabuelo y en donde nosotros, hijos y nietos queremos continuar la historia.
+              Don Merengo Club de Campo es un lugar con historia, en donde surgieron muchos encuentros iniciando con nuestro bisabuelo y en donde nosotros, hijos y nietos queremos continuar la historia.
             </p>
             <p className="text-white/90 text-lg leading-relaxed mb-6">
               Por eso hoy en día seguimos abriendo nuestras puertas para que nuevos amigos puedan disfrutar de nuestros espacios y crear nuevas experiencias inolvidables.

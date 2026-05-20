@@ -78,8 +78,7 @@ export default function BookingSection() {
           </h2>
           <div className="w-24 h-[1px] bg-sage mx-auto mb-6" />
           <p className="text-[#2D3424]/70 max-w-2xl mx-auto font-light">
-            Selecciona la fecha de tu preferencia y completa el formulario para
-            que nuestro equipo de conserjería coordine tu llegada.
+            Selecciona la fecha de tu preferencia y completa el formulario, en breve nos contactaremos.
           </p>
         </div>
 

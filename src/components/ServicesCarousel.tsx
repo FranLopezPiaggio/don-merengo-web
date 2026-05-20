@@ -13,22 +13,22 @@ const services = [
   },
   {
     title: 'Cumpleaños',
-    description: 'Celebra tu día especial con nosotros. Salones climatizados, jardines privados y un servicio de catering personalizado para cada edad.',
+    description: 'Celebra tu día especial con nosotros. Salones, jardines amplios y un servicio de catering personalizado.',
     image: '/services/evento1.webp',
   },
   {
     title: 'Cabalgatas',
-    description: 'Recorridos guiados por senderos naturales rodeados de monte nativo, ideales para conectar con la naturaleza y disfrutar del aire libre.',
+    description: 'Recorridos guiados por senderos naturales rodeados de monte, ideal para conectar con la naturaleza y disfrutar del aire libre.',
     image: '/services/cabalgata2.webp',
   },
   {
     title: 'Cabañas',
-    description: 'Acogedoras cabañas equipadas con todas las comodidades para una estadía de descanso absoluto, inmersas en el paisaje del club de campo.',
+    description: 'Cabañas equipadas con todas las comodidades para una estadía de descanso absoluto.',
     image: '/services/cabana.webp',
   },
   {
     title: 'Bajada al Río Uruguay',
-    description: 'Acceso directo a las costas del Río Uruguay con playa privada, ideal para jornadas de sol, pesca y deportes náuticos.',
+    description: 'Acceso directo a las costas del Río Uruguay, ideal para jornadas de sol, pesca y deportes náuticos.',
     image: '/services/rio.webp',
   },
 ];
@@ -79,12 +79,12 @@ export default function ServicesCarousel() {
                   className="group cursor-pointer"
                 >
                   <div>
-                    <img 
-                    src={service.image} 
-                    alt={service.title}
-                    width={1080}
-                    height={1080} 
-                    className="object-cover w-full h-[200px] lg:h-[300px] rounded-lg"
+                    <img
+                      src={service.image}
+                      alt={service.title}
+                      width={1080}
+                      height={1080}
+                      className="object-cover w-full h-[200px] lg:h-[300px] rounded-lg"
                     />
                   </div>
                   <h3 className="text-2xl font-serif text-forest mb-2">{service.title}</h3>

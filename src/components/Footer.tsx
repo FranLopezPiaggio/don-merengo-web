@@ -24,17 +24,6 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div className="space-y-6">
-            <h3 className="text-lg font-serif uppercase tracking-widest">Navegación</h3>
-            <ul className="space-y-4 text-sm text-cream/60 font-light">
-              <li><a href="#" className="hover:text-sage transition-colors">Inicio</a></li>
-              <li><a href="#reservas" className="hover:text-sage transition-colors">Reservas</a></li>
-              <li><a href="#servicios" className="hover:text-sage transition-colors">Servicios</a></li>
-              <li><a href="#ubicacion" className="hover:text-sage transition-colors">Ubicación</a></li>
-            </ul>
-          </div>
-
           {/* Contact */}
           <div className="space-y-6">
             <h3 className="text-lg font-serif uppercase tracking-widest">Contacto</h3>
