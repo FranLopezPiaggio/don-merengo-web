@@ -11,12 +11,12 @@ const reviews = [
   },
   {
     name: "Elena Martínez",
-    text: "Las caballerizas y el campo de golf están en perfectas condiciones. Ideal para pasar el fin de semana en familia.",
+    text: "Las cabalgatas y la bajada al rio son perfectas. Ideal para pasar el fin de semana en familia.",
     rating: 5,
   },
   {
     name: "Carlos Schmidt",
-    text: "La arquitectura del Club House es una obra de arte. La gastronomía superó todas mis expectativas.",
+    text: "El quincho, la pileta y todo el campo son hermosos, muy lindo para ir a descansar.",
     rating: 4,
   },
 ];
