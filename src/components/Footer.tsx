@@ -1,6 +1,7 @@
 'use client';
 
-import { Phone, Mail, MapPin, Instagram, Facebook, Twitter } from 'lucide-react';
+import { Phone, Mail, MapPin, Instagram, Facebook } from 'lucide-react';
+import WhatsApp from "/svg/whatsapp-color-svgrepo-com.svg"
 
 export default function Footer() {
   return (
@@ -38,17 +39,17 @@ export default function Footer() {
           <div className="space-y-6">
             <h3 className="text-lg font-serif uppercase tracking-widest">Contacto</h3>
             <ul className="space-y-4 text-sm text-cream/60 font-light">
-<li className="flex items-center gap-3">
-  <Phone size={16} className="text-sage" />
-  <a
-    href="https://api.whatsapp.com/send?phone=5493764609782"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="hover:text-sage transition-colors"
-  >
-    +54 9 3764 609782
-  </a>
-</li>
+              <li className="flex items-center gap-3">
+                <Phone size={16} className="text-sage" />
+                <a
+                  href="https://api.whatsapp.com/send?phone=5493764609782"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-sage transition-colors"
+                >
+                  +54 9 3764 609782
+                </a>
+              </li>
               <li className="flex items-center gap-3">
                 <Mail size={16} className="text-sage" />
                 <span>donmerengoclubdecampo@gmail.com</span>

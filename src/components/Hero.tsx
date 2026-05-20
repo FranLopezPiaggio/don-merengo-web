@@ -12,7 +12,7 @@ export default function Hero() {
           src="/entrada2.webp"
           alt="Don Merengo Club de Campo"
           fill
-          className="object-cover blur-[2px] scale-105"
+          className="object-cover blur-[6px] scale-105"
           priority
         />
         <div className="absolute inset-0 bg-black/40" />
@@ -20,7 +20,7 @@ export default function Hero() {
 
       {/* Content */}
       <div className="relative z-10 text-center px-6 max-w-4xl">
-        
+
         <motion.h1
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}

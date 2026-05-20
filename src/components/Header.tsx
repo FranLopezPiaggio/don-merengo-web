@@ -17,10 +17,10 @@ export default function Header() {
 
   useEffect(() => {
     let currentScrollY = 0;
-    
+
     const handleScroll = () => {
       const newScrollY = window.scrollY;
-      
+
       // Transparency logic
       if (newScrollY > 50) {
         setIsScrolled(true);
@@ -45,7 +45,7 @@ export default function Header() {
         }
         setIsVisible(true);
       }
-      
+
       currentScrollY = newScrollY;
     };
 
@@ -61,7 +61,7 @@ export default function Header() {
     { name: 'Reservas', href: '#reservas' },
     { name: 'Servicios', href: '#servicios' },
     { name: 'Ubicación', href: '#ubicacion' },
-    { name: 'Contacto', href: '#contacto' },
+    { name: 'Contacto', href: 'https://wa.me/5493764609782?text=Hola%20Don%20Merengo' },
   ];
 
   return (
@@ -69,14 +69,13 @@ export default function Header() {
       initial={{ y: 0 }}
       animate={{ y: isVisible ? 0 : -200 }}
       transition={{ duration: 0.3 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        isScrolled ? 'bg-cream/90 backdrop-blur-md shadow-sm py-4' : 'bg-transparent py-6'
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled ? 'bg-cream/90 backdrop-blur-md shadow-sm py-4' : 'bg-transparent py-6'
+        }`}
     >
       <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-        <Image 
+        <Image
           src={isScrolled ? '/don-merengo-logo-b.svg' : '/don-merengo-logo-w.svg'}
-          alt="Don Merengo Club de Campo" 
+          alt="Don Merengo Club de Campo"
           width={125}
           height={125}
           className="w-32 h-auto transition-all duration-300"
@@ -88,9 +87,8 @@ export default function Header() {
             <a
               key={link.name}
               href={link.href}
-              className={`text-sm uppercase tracking-widest hover:text-sage transition-colors ${
-                isScrolled ? 'text-forest' : 'text-white'
-              }`}
+              className={`text-sm uppercase tracking-widest hover:text-sage transition-colors ${isScrolled ? 'text-forest' : 'text-white'
+                }`}
             >
               {link.name}
             </a>
