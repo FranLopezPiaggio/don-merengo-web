@@ -6,67 +6,77 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { motion, AnimatePresence } from "motion/react";
 import { Check, Send, Calendar, Users, Phone, Mail } from "lucide-react";
+import { useReservationForm } from "@/hooks/useReservationForm";
 
-// WhatsApp business number (configurable)
-const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
-
-function generateWhatsAppMessage(data: {
-  name: string;
-  phone: string;
-  email: string;
-  people: string;
-  date: Date | undefined;
-}) {
-  const dateStr = data.date
-    ? format(data.date, "dd/MM/yyyy", { locale: es })
-    : "No seleccionada";
-
-  const message = `Hola, soy ${data.name}
-Teléfono: ${data.phone}
-Email: ${data.email}
-Fecha: ${dateStr}
-Personas: ${data.people}
-
-Quiero realizar una reserva.`;
-
-  return encodeURIComponent(message);
-}
+// Número de WhatsApp (configurable vía env)
+const RAW_WHATSAPP = process.env.NEXT_PUBLIC_BUSINESS_WHATSAPP;
+const WHATSAPP_NUMBER = RAW_WHATSAPP?.replace(/[^\d]/g, "");
+const IS_WHATSAPP_CONFIGURED = !!WHATSAPP_NUMBER && WHATSAPP_NUMBER.length >= 10;
 
 export default function BookingSection() {
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(
-    new Date(),
-  );
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    people: "2",
-  });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Usar el hook mejorado
+  const {
+    formData,
+    errors,
+    isSubmitting,
+    setIsSubmitting,
+    handleChange,
+    generateWhatsAppMessage,
+    validateForm,
+    resetForm,
+  } = useReservationForm();
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Generate WhatsApp URL
-    const message = generateWhatsAppMessage({
-      ...formData,
-      date: selectedDate,
-    });
+    if (!IS_WHATSAPP_CONFIGURED) {
+      alert("WhatsApp no está configurado. Contacta al administrador.");
+      return;
+    }
 
-    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
+    // Validar formulario con Zod
+    if (!validateForm(formData, selectedDate)) {
+      // Mostrar errores al usuario (opcional: scroll al primer error)
+      const firstError = Object.values(errors)[0];
+      if (firstError) {
+        alert(firstError);
+      }
+      return;
+    }
 
-    // Open WhatsApp in new tab
-    window.open(whatsappUrl, "_blank");
+    setIsSubmitting(true);
 
-    // Show success state
-    setIsSubmitted(true);
+    try {
+      // Generar mensaje sanitizado
+      const message = generateWhatsAppMessage({
+        ...formData,
+        date: selectedDate,
+      });
 
-    // Reset after 5 seconds
-    setTimeout(() => {
-      setIsSubmitted(false);
-      setFormData({ name: "", email: "", phone: "", people: "2" });
-      setSelectedDate(new Date());
-    }, 5000);
+      const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
+
+      // Abrir WhatsApp en nueva pestaña
+      window.open(whatsappUrl, "_blank");
+
+      // Mostrar éxito
+      setIsSubmitted(true);
+
+      // Reset después de 5 segundos
+      setTimeout(() => {
+        setIsSubmitted(false);
+        resetForm();
+        setSelectedDate(new Date());
+        setIsSubmitting(false);
+      }, 5000);
+
+    } catch (error) {
+      console.error("Error al generar reserva:", error);
+      alert("Ocurrió un error. Por favor, intenta de nuevo.");
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -177,10 +187,9 @@ export default function BookingSection() {
                         type="text"
                         className="w-full bg-[#F5F2ED]/50 border border-[#2D3424]/10 px-4 py-3 rounded-sm focus:outline-none focus:border-sage transition-colors"
                         placeholder="Ej: Juan Pérez"
-                        value={formData.name}
-                        onChange={(e) =>
-                          setFormData({ ...formData, name: e.target.value })
-                        }
+                        name="customerName"
+                        value={formData.customerName}
+                        onChange={(e) => handleChange(e)}
                       />
                     </div>
                     <div className="space-y-2">
@@ -192,10 +201,9 @@ export default function BookingSection() {
                         type="tel"
                         className="w-full bg-[#F5F2ED]/50 border border-[#2D3424]/10 px-4 py-3 rounded-sm focus:outline-none focus:border-sage transition-colors"
                         placeholder="+54 9 11 ..."
-                        value={formData.phone}
-                        onChange={(e) =>
-                          setFormData({ ...formData, phone: e.target.value })
-                        }
+                        name="phoneNumber"
+                        value={formData.phoneNumber}
+                        onChange={(e) => handleChange(e)}
                       />
                     </div>
                   </div>
@@ -209,10 +217,9 @@ export default function BookingSection() {
                       type="email"
                       className="w-full bg-[#F5F2ED]/50 border border-[#2D3424]/10 px-4 py-3 rounded-sm focus:outline-none focus:border-sage transition-colors"
                       placeholder="juan@ejemplo.com"
+                      name="email"
                       value={formData.email}
-                      onChange={(e) =>
-                        setFormData({ ...formData, email: e.target.value })
-                      }
+                      onChange={(e) => handleChange(e)}
                     />
                   </div>
 
@@ -223,17 +230,15 @@ export default function BookingSection() {
                       </label>
                       <select
                         className="w-full bg-[#F5F2ED]/50 border border-[#2D3424]/10 px-4 py-3 rounded-sm focus:outline-none focus:border-sage transition-colors"
-                        value={formData.people}
-                        onChange={(e) =>
-                          setFormData({ ...formData, people: e.target.value })
-                        }
+                        name="guests"
+                        value={formData.guests}
+                        onChange={(e) => handleChange(e)}
                       >
-                        {[1, 2, 3, 4, 5, 6, 7, 8].map((n) => (
-                          <option key={n} value={n}>
-                            {n} {n === 1 ? "Persona" : "Personas"}
+                        {[...Array(20)].map((_, i) => (
+                          <option key={i + 1} value={i + 1}>
+                            {i + 1} {i + 1 === 1 ? "Persona" : "Personas"}
                           </option>
                         ))}
-                        <option value="9+">Más de 8</option>
                       </select>
                     </div>
                     <div className="space-y-2">
@@ -250,10 +255,22 @@ export default function BookingSection() {
 
                   <button
                     type="submit"
-                    className="w-full py-4 bg-forest text-white uppercase tracking-[0.2em] text-sm hover:bg-sage transition-all duration-500 rounded-sm mt-4 flex items-center justify-center gap-2"
+                    disabled={!IS_WHATSAPP_CONFIGURED}
+                    className={`w-full py-4 uppercase tracking-[0.2em] text-sm rounded-sm mt-4 flex items-center justify-center gap-2 transition-all duration-500 ${
+                      IS_WHATSAPP_CONFIGURED
+                        ? "bg-forest text-white hover:bg-sage cursor-pointer"
+                        : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                    }`}
+                    title={
+                      !IS_WHATSAPP_CONFIGURED
+                        ? "WhatsApp no configurado"
+                        : undefined
+                    }
                   >
                     <Send className="w-4 h-4" />
-                    Enviar Solicitud por WhatsApp
+                    {IS_WHATSAPP_CONFIGURED
+                      ? "Enviar Solicitud por WhatsApp"
+                      : "WhatsApp no disponible"}
                   </button>
 
                   <p className="text-xs text-center text-[#2D3424]/40">
