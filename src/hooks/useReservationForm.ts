@@ -69,18 +69,58 @@ Quiero realizar una reserva.`;
     []
   );
 
-  // Manejar cambio de inputs
+  // Validar un campo individual (retorna mensaje de error o null)
+  const validateField = useCallback((name: string, value: string | number) => {
+    switch (name) {
+      case "customerName":
+        if (!value || String(value).length < 2) return "Mínimo 2 caracteres";
+        if (!/^[a-zA-ZáéíóúñÑ\s]+$/.test(String(value)))
+          return "Solo letras y espacios";
+        return null;
+      case "email":
+        if (!value) return "Campo requerido";
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value)))
+          return "Email inválido";
+        return null;
+      case "phoneNumber":
+        if (!value) return "Campo requerido";
+        if (String(value).length < 8) return "Mínimo 8 dígitos";
+        return null;
+      case "guests":
+        if (Number(value) < 1 || Number(value) > 20)
+          return "Entre 1 y 20 personas";
+        return null;
+      default:
+        return null;
+    }
+  }, []);
+
+  // Manejar cambio de inputs (actualiza estado + valida en tiempo real)
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-      const { name, value } = e.target;
+      const target = e.target;
+      const { name } = target;
 
+      // Detectar checkbox → usar checked en vez de value
+      const value =
+        target instanceof HTMLInputElement && target.type === "checkbox"
+          ? target.checked
+          : target.value;
+
+      // Actualizar formData
       if (name === "guests") {
         setFormData((prev) => ({ ...prev, guests: Number(value) }));
       } else {
         setFormData((prev) => ({ ...prev, [name]: value }));
       }
+
+      // Validar el campo en tiempo real (solo inputs de texto/select)
+      if (typeof value === "string") {
+        const error = validateField(name, value);
+        setErrors((prev) => ({ ...prev, [name]: error || undefined }));
+      }
     },
-    []
+    [validateField]
   );
 
   // Validar formulario completo
@@ -94,7 +134,15 @@ Quiero realizar una reserva.`;
         newErrors.email = "Email inválido";
       if (!data.phoneNumber || data.phoneNumber.length < 8)
         newErrors.phoneNumber = "Mínimo 8 dígitos";
-      if (!date) newErrors.date = "Selecciona una fecha";
+      if (!date) {
+        newErrors.date = "Selecciona una fecha";
+      } else {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        if (date <= today) {
+          newErrors.date = "La fecha debe ser futura";
+        }
+      }
       if (data.guests < 1 || data.guests > 20)
         newErrors.guests = "Entre 1 y 20 personas";
 
@@ -118,6 +166,16 @@ Quiero realizar una reserva.`;
     setErrors({});
   }, []);
 
+  // Limpiar error de un campo específico
+  const clearFieldError = useCallback((field: string) => {
+    setErrors((prev) => ({ ...prev, [field]: undefined }));
+  }, []);
+
+  // Establecer error de un campo específico
+  const setFieldError = useCallback((field: string, message: string) => {
+    setErrors((prev) => ({ ...prev, [field]: message }));
+  }, []);
+
   return {
     formData,
     errors,
@@ -127,5 +185,7 @@ Quiero realizar una reserva.`;
     generateWhatsAppMessage,
     validateForm,
     resetForm,
+    clearFieldError,
+    setFieldError,
   };
 }

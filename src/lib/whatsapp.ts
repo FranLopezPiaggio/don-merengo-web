@@ -64,3 +64,18 @@ export function getReservationWhatsAppLink(data: ReservationData): string {
     const message = buildWhatsAppMessage(data);
     return generateWaMeLink(BUSINESS_WHATSAPP, message);
 }
+
+/**
+ * Mensaje genérico para consultas (sin reserva)
+ */
+export function buildInquiryMessage(): string {
+    return "Hola, tengo una consulta sobre una reserva.";
+}
+
+/**
+ * Link de WhatsApp para consultas generales
+ */
+export function getWhatsAppInquiryLink(phoneNumber: string): string {
+    const message = buildInquiryMessage();
+    return generateWaMeLink(phoneNumber, message);
+}
